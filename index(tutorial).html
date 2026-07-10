@@ -1,0 +1,75 @@
+<html>
+    <head>
+        <title>DopaNotes</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+        <style>
+            @keyframes flutuar-violeta {
+                0%, 100% { transform: translate(0px, 0px); }
+                50% { transform: translate(400px, 200px); } 
+            }
+
+            @keyframes flutuar-fuchsia {
+                0%, 100% { transform: translate(0px, 0px); }
+                50% { transform: translate(-400px, -100px); } 
+            }
+
+            .animacao-luz-violeta {
+                animation: flutuar-violeta 10s ease-in-out infinite;
+            }
+            .animacao-luz-fuchsia {
+                animation: flutuar-fuchsia 14s ease-in-out infinite;
+            }
+        </style>
+    </head>  
+
+    <body class="bg-zinc-900/80 text-white max-w-lg mx-auto">
+        <div class="fixed top-0 -left-10 w-72 h-72 bg-violet-600/30 rounded-full blur-3xl -z-10 animacao-luz-violeta"></div>
+        <div class="fixed bottom-0 -right-10 w-72 h-72 bg-fuchsia-600/30 rounded-full blur-3xl -z-10 animacao-luz-fuchsia"></div>
+
+        <header>
+            <h1 class="text-3xl font-bold p-6">DopaNotes</h1>
+            <h2 class="text-2xl font-bold p-6">Home</h2>
+        </header>
+
+        <main class="p-6 grid grid-cols-2 gap-4">
+            <div class="bg-zinc-800/50 backdrop-blur-md rounded-2xl p-5 text-center">
+                <h2 class="text-sm text-zinc-400">Tasks Today</h2>
+                <p class="text-4xl font-bold">2/2</p>
+                <p class="text-zinc-400">All done!</p>
+                <div class="w-full h-2 bg-zinc-700 rounded-full mt-4">
+                    <div class="w-full h-full bg-emerald-500 rounded-full"></div>
+                </div>
+            </div>
+            
+            <div class="bg-zinc-800/50 backdrop-blur-md rounded-2xl p-5 text-center">
+                <h2 class="text-sm text-zinc-400">Habits Today</h2>
+                <p class="text-4xl font-bold">1/5</p>
+                <p class="text-zinc-400">1 day streak</p>
+                <div class="w-full h-2 bg-zinc-700 rounded-full mt-4">
+                    <div class="w-1/5 h-full bg-emerald-500 rounded-full"></div>
+                </div>
+            </div>
+
+            <div class="bg-zinc-800/50 backdrop-blur-md rounded-2xl p-5 col-span-2">
+                <h2 class="text-zinc-400">Quick Notes</h2>
+                <p class="text-4xl font-bold">1 notes</p>
+                <p class="text-zinc-400">Last updated 09/07/2026</p>
+            </div>
+
+            <div class="bg-zinc-800/50 backdrop-blur-md rounded-2xl p-5 col-span-2">
+                <h2 class="text-zinc-400">Projects</h2>
+                <p class="text-4xl font-bold">1 project</p>
+            </div>
+        </main>
+
+        <nav class="p-6 text-center flex justify-around items-center">
+            <button><i class="ph ph-calendar-check text-2xl"></i></button>
+            <button><i class="ph ph-house text-2xl"></i></button>
+            <button><i class="ph ph-gear text-2xl"></i></button>
+            <button class="bg-violet-600 text-white rounded-full w-8 h-8 hover:bg-violet-500 hover:scale-110 transition">+</button>
+        </nav>
+    </body>
+</html>
