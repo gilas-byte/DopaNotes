@@ -16,15 +16,12 @@ def read_root():
 # Nossa nova rota POST para criar tarefas!
 @app.post("/tarefas/")
 def criar_tarefa(tarefa: schemas.TarefaCriar, db: Session = Depends(get_db)):
-    # 1. Pega os dados validados e coloca no molde do banco de dados
     nova_tarefa = modelos.Tarefa(title=tarefa.title, description=tarefa.description)
     
-    # 2. Adiciona, salva e atualiza para pegar o ID que o Postgres gerou
     db.add(nova_tarefa)
     db.commit()
     db.refresh(nova_tarefa)
     
-    # 3. Devolve a tarefa completa (agora com ID, data e status)
     return nova_tarefa
 
 @app.get("/tarefas/")
@@ -80,14 +77,22 @@ def atualizar_habito(habito_id: int, habito_atualizado: schemas.HabitoAtualizar,
     if habito_encontrado == None:
         raise HTTPException(status_code=404, detail="Habito não encontrado")
     else:
+        momentDate = datetime.datetime.now()
         if not habito_atualizado.title == None:
             habito_encontrado.title = habito_atualizado.title
         if habito_atualizado.is_completed == True:
-            momentDate = datetime.datetime.now()
             if habito_encontrado.last_check == None or momentDate.date() != habito_encontrado.last_check.date():
                 habito_encontrado.last_check = momentDate
                 habito_encontrado.streak += 1
-
+        else:
+            if habito_atualizado.is_completed == False:
+                if habito_encontrado.last_check and momentDate.date() == habito_encontrado.last_check.date():
+                    if habito_encontrado.streak > 0:
+                        habito_encontrado.streak -= 1
+                    if habito_encontrado.streak > 0:
+                        habito_encontrado.last_check = momentDate - datetime.timedelta(days=1)
+                    else:
+                        habito_encontrado.last_check = None
         db.commit()
         db.refresh(habito_encontrado)
 

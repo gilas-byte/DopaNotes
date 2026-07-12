@@ -1,5 +1,5 @@
-import datetime
+from datetime import datetime, date, timedelta
 
-date = datetime.datetime.now()
+yesterday = date.today() - timedelta(days = 1)
 
-print(date.date())
+print(yesterday)
