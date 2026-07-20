@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import modelos, schemas
 from database import engine, get_db
@@ -9,11 +10,22 @@ modelos.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="DopaNotes API")
 
+origens_permitidas = [
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origens_permitidas,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.get("/")
 def read_root():
     return {"mensagem": "Bem-vindo ao backend do DopaNotes!"}
 
-# Nossa nova rota POST para criar tarefas!
 @app.post("/tarefas/")
 def criar_tarefa(tarefa: schemas.TarefaCriar, db: Session = Depends(get_db)):
     nova_tarefa = modelos.Tarefa(title=tarefa.title, description=tarefa.description)
@@ -89,7 +101,6 @@ def atualizar_habito(habito_id: int, habito_atualizado: schemas.HabitoAtualizar,
                 if habito_encontrado.last_check and momentDate.date() == habito_encontrado.last_check.date():
                     if habito_encontrado.streak > 0:
                         habito_encontrado.streak -= 1
-                    if habito_encontrado.streak > 0:
                         habito_encontrado.last_check = momentDate - datetime.timedelta(days=1)
                     else:
                         habito_encontrado.last_check = None

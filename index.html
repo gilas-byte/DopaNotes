@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
     <head>
         <title>DopaNotes</title>
         <script src="https://cdn.tailwindcss.com"></script>
@@ -29,46 +30,48 @@
         <div class="fixed top-0 -left-10 w-72 h-72 bg-violet-600/30 rounded-full blur-3xl -z-10 animacao-luz-violeta"></div>
         <div class="fixed bottom-0 -right-10 w-72 h-72 bg-fuchsia-600/30 rounded-full blur-3xl -z-10 animacao-luz-fuchsia"></div>
 
-        <header>
-            <h1 class="text-3xl font-bold p-6">DopaNotes</h1>
-            <h2 class="text-2xl font-bold p-6">Home</h2>
+        <header class="p-4 mb-10">
+            <div class="flex items-center gap-2">
+                <h2 class="ph ph-house text-2xl font-bold"></h2>
+                <h2 class="text-2xl font-bold">Inicio</h2>
+            </div>
         </header>
 
         <main class="p-6 grid grid-cols-2 gap-4">
             <div onclick="window.location.href='tarefas.html'" class="bg-zinc-800/50 backdrop-blur-md rounded-2xl p-5 text-center cursor-pointer hover:opacity-80">
-                <h2 class="text-sm text-zinc-400">Tasks Today</h2>
-                <p id="numero-tarefas" class="text-4xl font-bold"></p>
-                <p id="texto-tarefas" class="text-zinc-400"></p>
+                <h2 class="text-sm text-zinc-400">Tarefas de Hoje</h2>
+                <p id="numero-tarefas" class="text-4xl font-bold">0</p>
+                <p id="texto-tarefas" class="text-zinc-400">Carregando...</p>
                 <div class="w-full h-2 bg-zinc-700 rounded-full mt-4">
                     <div id="barra-tarefas" class="w-full h-full bg-emerald-500 rounded-full"></div>
                 </div>
             </div>
             
             <div onclick="window.location.href='habitos.html'" class="bg-zinc-800/50 backdrop-blur-md rounded-2xl p-5 text-center cursor-pointer hover:opacity-80">
-                <h2 class="text-sm text-zinc-400">Habits Today</h2>
-                <p id ="numero-habitos" class="text-4xl font-bold">1/5</p>
-                <p id="texto-streak" class="text-zinc-400"></p>
+                <h2 class="text-sm text-zinc-400">Habitos de Hoje</h2>
+                <p id ="numero-habitos" class="text-4xl font-bold">0</p>
+                <p id="texto-streak" class="text-zinc-400">Carregando...</p>
                 <div class="w-full h-2 bg-zinc-700 rounded-full mt-4">
                     <div id="barra-habitos" class="h-full bg-emerald-500 rounded-full"></div>
                 </div>
             </div>
 
             <div class="bg-zinc-800/50 backdrop-blur-md rounded-2xl p-5 col-span-2">
-                <h2 class="text-zinc-400">Quick Notes</h2>
-                <p class="text-4xl font-bold">1 notes</p>
-                <p class="text-zinc-400">Last updated 09/07/2026</p>
+                <h2 class="text-zinc-400">Notas Rapidas</h2>
+                <p class="text-4xl font-bold">0 notas</p>
+                <p class="text-zinc-400">Carregando...</p>
             </div>
 
             <div class="bg-zinc-800/50 backdrop-blur-md rounded-2xl p-5 col-span-2">
-                <h2 class="text-zinc-400">Projects</h2>
-                <p class="text-4xl font-bold">1 project</p>
+                <h2 class="text-zinc-400">Projetos</h2>
+                <p class="text-4xl font-bold">0 Projetos</p>
             </div>
         </main>
 
-        <nav class="p-6 text-center flex justify-around items-center">
-            <button><i class="ph ph-calendar-check text-2xl"></i></button>
-            <button><i class="ph ph-house text-2xl"></i></button>
-            <button><i class="ph ph-gear text-2xl"></i></button>
+        <nav class="p-6 w-full text-center flex justify-around items-center fixed bottom-0 left-0 right-0 max-w-md mx-auto">
+            <button class="hover:scale-110 transition"><i class="ph ph-calendar-check text-2xl"></i></button>
+            <button class="bg-emerald-500 text-white rounded-full w-8 h-8 hover:bg-emerald-400 hover:scale-110 transition"><i class="ph ph-house text-2xl"></i></button>
+            <button class="hover:scale-110 transition"><i class="ph ph-gear text-2xl"></i></button>
             <button class="bg-violet-600 text-white rounded-full w-8 h-8 hover:bg-violet-500 hover:scale-110 transition">+</button>
         </nav>
 
@@ -79,9 +82,9 @@
                     let listaDeStreaks = dados.map(habito => habito.streak)
                     let maiorStreak = Math.max(...listaDeStreaks)
                     if (maiorStreak === 1){
-                        document.getElementById("texto-streak").innerText = maiorStreak + " day streak";
+                        document.getElementById("texto-streak").innerText = maiorStreak + " dia de sequência";
                     } else {
-                        document.getElementById("texto-streak").innerText = maiorStreak + " days streak";
+                        document.getElementById("texto-streak").innerText = maiorStreak + " dias de sequência";
                     }
                     let hoje = new Date().toISOString().split('T')[0];
                     let habitosConcluidos = dados.filter(habito => 
@@ -107,13 +110,15 @@
                     } else {
                         document.getElementById("numero-tarefas").innerText = tarefasConcluidas.length + "/" + dados.length
                     }
-                    document.getElementById("barra-tarefas").style.width = porcentagem + "%"
                     if (porcentagem === 100) {
-                        textoTarefa = "All done!"
+                        textoTarefa = "Todas feitas!"
+                        document.getElementById("barra-tarefas").style.width = porcentagem + "%"
                     } else if (100 > porcentagem >= 50) {
-                        textoTarefa = "Nearly there!"
+                        textoTarefa = "Quase lá!"
+                        document.getElementById("barra-tarefas").style.width = porcentagem + "%"
                     } else {
-                        textoTarefa = "Let's start this!"
+                        textoTarefa = "Bora lá!"
+                        document.getElementById("barra-tarefas").style.width = 0 + "%"
                     }
                     document.getElementById("texto-tarefas").innerText = textoTarefa
                 })
