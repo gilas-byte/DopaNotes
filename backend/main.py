@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-import modelos, schemas
-from database import engine, get_db
+import backend.modelos as modelos, backend.schemas as schemas
+from backend.database import engine, get_db
 import datetime
 
 # Cria as tabelas no banco de dados

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <title>DopaNotes</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+        <style>
+            @keyframes flutuar-violeta {
+                0%, 100% { transform: translate(0px, 0px); }
+                50% { transform: translate(400px, 200px); } 
+            }
+
+            @keyframes flutuar-fuchsia {
+                0%, 100% { transform: translate(0px, 0px); }
+                50% { transform: translate(-400px, -100px); } 
+            }
+
+            .animacao-luz-violeta {
+                animation: flutuar-violeta 10s ease-in-out infinite;
+            }
+            .animacao-luz-fuchsia {
+                animation: flutuar-fuchsia 14s ease-in-out infinite;
+            }
+        </style>
+    </head>  
+
+    <body class="bg-zinc-900/80 text-white max-w-lg mx-auto">
+        <div class="fixed top-0 -left-10 w-72 h-72 bg-violet-600/30 rounded-full blur-3xl -z-10 animacao-luz-violeta"></div>
+        <div class="fixed bottom-0 -right-10 w-72 h-72 bg-fuchsia-600/30 rounded-full blur-3xl -z-10 animacao-luz-fuchsia"></div>
+
+        <header class="p-4 mb-10">
+            <div class="flex items-center justify-between w-full">
+                <div class="flex items-center gap-2">
+                    <h2 class="ph ph-notepad text-2xl font-bold"></h2>
+                    <h2 class="text-2xl font-bold">Tarefas</h2>
+                </div>
+                <h2 id="api-check" class="ph ph-cloud-x text-red-500 text-2xl font-bold"></h2>
+            </div>
+        </header>
+
+        <div id="modal-criacao" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden">
+            <div id="interface-criacao" class="flex flex-col gap-4 bg-violet-600/30 backdrop-blur-md p-4 rounded-xl mb-6">
+                <h2 class="text-xl font-bold">Qual tarefa?</h2>
+                <button id="botao-fechar-modal" class="bg-red-600/80 w-6 h-6 fixed top-0 -right-0.5 rounded-full hover:bg-red-500 transition">X</button>
+                <input class="bg-zinc-800 text-zinc-100 placeholder-zinc-500 p-3 rounded-lg outline-none focus:ring-2 focus:ring-violet-500" type="text" id="titulo-nova-tarefa" placeholder="Título da tarefa">
+                <textarea class="bg-zinc-800 text-zinc-100 placeholder-zinc-500 p-3 rounded-lg outline-none focus:ring-2 focus:ring-violet-500" type="text" id="descricao-nova-tarefa" placeholder="Descrição da tarefa"></textarea>
+                <button id="botao-criar-tarefa" class="rounded-full bg-emerald-900 hover:bg-emerald-800">Criar Tarefa</button>
+            </div>
+        </div>
+
+        <button id="botao-abrir-modal" class="bg-violet-600 px-4 py-2 text-white rounded-full mb-6 hover:bg-violet-500 transition">+ Nova Tarefa</button>
+        <div id="container-tarefas"></div>
+
+        <nav class="p-6 w-full text-center flex justify-around items-center fixed bottom-0 left-0 right-0 max-w-md mx-auto">
+            <button onclick="window.location.href='tarefas.html'" class="bg-fuchsia-500 text-white rounded-full w-8 h-8 hover:bg-fuchsia-400  hover:scale-110 transition"><i class="ph ph-calendar-check text-2xl"></i></button>
+            <button onclick="window.location.href='index.html'" class="hover:scale-110 transition"><i class="ph ph-house text-2xl"></i></button>
+            <button onclick="window.location.href='configuracoes.html'" class="hover:scale-110 transition"><i class="ph ph-gear text-2xl"></i></button>
+            <button class="bg-violet-600 text-white rounded-full w-8 h-8 hover:bg-violet-500 hover:scale-110 transition">+</button>
+        </nav>
+        
+        <script type="module" src="js/tarefas.js"></script>
+    </body>
+</html>
