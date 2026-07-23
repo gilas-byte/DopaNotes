@@ -1,4 +1,4 @@
-export const traducoes = {
+export const translations = {
     pt: {
         inicio: "Início",
         tarefas_de_hoje: "Tarefas de Hoje",
@@ -29,18 +29,18 @@ export const traducoes = {
     }
 };
 
-export function aplicarTraducao(idioma) {
-    const elementosParaTraduzir = document.querySelectorAll("[data-i18n]");
-    const menuIdioma = document.getElementById('seletor-idioma');
-    localStorage.setItem('idiomaSalvo', idioma);
-    elementosParaTraduzir.forEach((elemento) => {
-        const chave = elemento.getAttribute('data-i18n');
-        elemento.innerText = traducoes[idioma][chave]
+export function applyTranslation(language) {
+    const elementsToTranslate = document.querySelectorAll("[data-i18n]");
+    const languageMenu = document.getElementById('language-selector');
+    localStorage.setItem('savedLanguage', language);
+    elementsToTranslate.forEach((element) => {
+        const key = element.getAttribute('data-i18n');
+        element.innerText = translations[language][key]
     })
-    if (menuIdioma) {
-        document.getElementById('seletor-idioma').value = idioma;
+    if (languageMenu) {
+        document.getElementById('language-selector').value = language;
     }
 }
 
-const idiomaSalvo = localStorage.getItem('idiomaSalvo') || 'pt';
-aplicarTraducao(idiomaSalvo)
+const savedLanguage = localStorage.getItem('savedLanguage') || 'pt';
+applyTranslation(savedLanguage)

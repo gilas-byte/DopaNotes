@@ -7,34 +7,34 @@
         <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
         <style>
-            @keyframes flutuar-violeta {
+            @keyframes float-violet {
                 0%, 100% { transform: translate(0px, 0px); }
-                50% { transform: translate(400px, 200px); } 
+                50% { transform: translate(400px, 200px); }
             }
 
-            @keyframes flutuar-fuchsia {
+            @keyframes float-fuchsia {
                 0%, 100% { transform: translate(0px, 0px); }
-                50% { transform: translate(-400px, -100px); } 
+                50% { transform: translate(-400px, -100px); }
             }
 
-            .animacao-luz-violeta {
-                animation: flutuar-violeta 10s ease-in-out infinite;
+            .light-anim-violet {
+                animation: float-violet 10s ease-in-out infinite;
             }
-            .animacao-luz-fuchsia {
-                animation: flutuar-fuchsia 14s ease-in-out infinite;
+            .light-anim-fuchsia {
+                animation: float-fuchsia 14s ease-in-out infinite;
             }
         </style>
     </head>
 
     <body class="bg-zinc-900/80 text-white max-w-lg mx-auto">
-        <div class="fixed top-0 -left-10 w-72 h-72 bg-violet-600/30 rounded-full blur-3xl -z-10 animacao-luz-violeta"></div>
-        <div class="fixed bottom-0 -right-10 w-72 h-72 bg-fuchsia-600/30 rounded-full blur-3xl -z-10 animacao-luz-fuchsia"></div>
+        <div class="fixed top-0 -left-10 w-72 h-72 bg-violet-600/30 rounded-full blur-3xl -z-10 light-anim-violet"></div>
+        <div class="fixed bottom-0 -right-10 w-72 h-72 bg-fuchsia-600/30 rounded-full blur-3xl -z-10 light-anim-fuchsia"></div>
 
         <header class="p-4 mb-10">
             <div class="flex items-center justify-between w-full">
                 <div class="flex items-center gap-2">
                     <h2 class="ph ph-gear text-2xl font-bold"></h2>
-                    <h2 class="text-2xl font-bold">Configurações</h2>
+                    <h2 data-i18n="settings" class="text-2xl font-bold">Configurações</h2>
                 </div>
                 <h2 id="api-check" class="ph ph-cloud-x text-red-500 text-2xl font-bold"></h2>
             </div>
@@ -42,8 +42,8 @@
 
         <main>
             <div class="bg-zinc-800/50 backdrop-blur-md rounded-2xl p-5 flex justify-between items-center">
-                <p data-i18n>Idioma</p>
-                <select id="seletor-idioma" class="bg-transparent text-sm text-zinc-400 outline-none cursor-pointer">
+                <p data-i18n="language">Idioma</p>
+                <select id="language-selector" class="bg-transparent text-sm text-zinc-400 outline-none cursor-pointer">
                     <option value="pt">🇧🇷 PT</option>
                     <option value="en">🇺🇸 EN</option>
                 </select>
@@ -51,13 +51,12 @@
         </main>
 
         <nav class="p-6 w-full text-center flex justify-around items-center fixed bottom-0 left-0 right-0 max-w-md mx-auto">
-            <button onclick="window.location.href='tarefas.html'" class="hover:scale-110 transition"><i class="ph ph-calendar-check text-2xl"></i></button>
+            <button onclick="window.location.href='tasks.html'" class="hover:scale-110 transition"><i class="ph ph-calendar-check text-2xl"></i></button>
             <button onclick="window.location.href='index.html'" class="hover:scale-110 transition"><i class="ph ph-house text-2xl"></i></button>
-            <button onclick="window.location.href='configuracoes.html'" class="bg-fuchsia-500 text-white rounded-full w-8 h-8 hover:bg-fuchsia-400 hover:scale-110 transition"><i class="ph ph-gear text-2xl"></i></button>
+            <button onclick="window.location.href='settings.html'" class="bg-fuchsia-500 text-white rounded-full w-8 h-8 hover:bg-fuchsia-400 hover:scale-110 transition"><i class="ph ph-gear text-2xl"></i></button>
             <button class="bg-violet-600 text-white rounded-full w-8 h-8 hover:bg-violet-500 hover:scale-110 transition">+</button>
         </nav>
 
-        <script type="module" src="js/configuracoes.js"></script>
+        <script type="module" src="js/settings.js"></script>
     </body>
-
 </html>

@@ -1,18 +1,18 @@
 from pydantic import BaseModel
 from typing import Optional
 
-class TarefaCriar(BaseModel):
+class taskCreate(BaseModel):
     title: str
-    description: Optional[str] = None # Usamos Optional porque você sugeriu que a descrição poderia ser opcional!
+    description: Optional[str] = None
 
-class TarefaAtualizar(BaseModel):
+class taskUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     is_completed: Optional[bool] = None
 
-class HabitoCriar(BaseModel):
+class habitCreate(BaseModel):
     title: str
 
-class HabitoAtualizar(BaseModel):
+class habitUpdate(BaseModel):
     title: Optional[str] = None
     is_completed: Optional[bool] = None

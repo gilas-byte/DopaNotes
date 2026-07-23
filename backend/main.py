@@ -1,124 +1,131 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-import backend.modelos as modelos, backend.schemas as schemas
+import backend.models as models, backend.schemas as schemas
 from backend.database import engine, get_db
 import datetime
 from fastapi.staticfiles import StaticFiles
 
-# Cria as tabelas no banco de dados
-modelos.Base.metadata.create_all(bind=engine)
+# Create the database tables
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="DopaNotes API")
 
-origens_permitidas = [
-    "http://localhost:5500",
-    "http://127.0.0.1:5500",
-]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origens_permitidas,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+def calculate_streak(habit, today=None):
+    today = today or datetime.date.today()
+    if habit.last_check is None:
+        return 0
+    days = (today - habit.last_check.date()).days
+    return habit.streak if days <= 1 else 0
 
-@app.get("/")
+
+def is_done_today(habit, today=None):
+    today = today or datetime.date.today()
+    return habit.last_check is not None and habit.last_check.date() == today
+
+@app.get("/health")
 def read_root():
-    return {"mensagem": "Bem-vindo ao backend do DopaNotes!"}
+    return {"message": "Welcome to the DopaNotes backend!"}
 
-@app.post("/tarefas/")
-def criar_tarefa(tarefa: schemas.TarefaCriar, db: Session = Depends(get_db)):
-    nova_tarefa = modelos.Tarefa(title=tarefa.title, description=tarefa.description)
-    
-    db.add(nova_tarefa)
+@app.post("/tasks/")
+def create_task(task: schemas.taskCreate, db: Session = Depends(get_db)):
+    new_task = models.Task(title=task.title, description=task.description)
+
+    db.add(new_task)
     db.commit()
-    db.refresh(nova_tarefa)
-    
-    return nova_tarefa
+    db.refresh(new_task)
 
-@app.get("/tarefas/")
-def ler_tarefas(db: Session = Depends(get_db)):
-    tarefas = db.query(modelos.Tarefa).all()
-    return tarefas
+    return new_task
 
-@app.put("/tarefas/{tarefa_id}")
-def atualizar_tarefa(tarefa_id: int, tarefa_atualizada: schemas.TarefaAtualizar, db: Session = Depends(get_db)):
-    tarefa_encontrada = db.query(modelos.Tarefa).filter(modelos.Tarefa.id == tarefa_id).first()
-    if tarefa_encontrada == None:
-        raise HTTPException(status_code=404, detail="Tarefa não encontrada")
+@app.get("/tasks/")
+def read_tasks(db: Session = Depends(get_db)):
+    tasks = db.query(models.Task).all()
+    return tasks
+
+@app.put("/tasks/{task_id}")
+def update_task(task_id: int, task_updated: schemas.taskUpdate, db: Session = Depends(get_db)):
+    task_found = db.query(models.Task).filter(models.Task.id == task_id).first()
+    if task_found == None:
+        raise HTTPException(status_code=404, detail="Task not found!")
     else:
-        if not tarefa_atualizada.title == None:
-            tarefa_encontrada.title = tarefa_atualizada.title
-        if not tarefa_atualizada.description == None:
-            tarefa_encontrada.description = tarefa_atualizada.description
-        if not tarefa_atualizada.is_completed == None:
-            tarefa_encontrada.is_completed = tarefa_atualizada.is_completed
+        if not task_updated.title == None:
+            task_found.title = task_updated.title
+        if not task_updated.description == None:
+            task_found.description = task_updated.description
+        if not task_updated.is_completed == None:
+            task_found.is_completed = task_updated.is_completed
         db.commit()
-        db.refresh(tarefa_encontrada)
-        return tarefa_encontrada
-    
-@app.delete("/tarefas/{tarefa_id}")
-def deletar_tarefa(tarefa_id: int, db: Session = Depends(get_db)):
-    tarefa_encontrada = db.query(modelos.Tarefa).filter(modelos.Tarefa.id == tarefa_id).first()
-    if tarefa_encontrada == None:
-        raise HTTPException(status_code=404, detail="Tarefa não encontrada")
+        db.refresh(task_found)
+        return task_found
+
+@app.delete("/tasks/{task_id}")
+def delete_task(task_id: int, db: Session = Depends(get_db)):
+    task_found = db.query(models.Task).filter(models.Task.id == task_id).first()
+    if task_found == None:
+        raise HTTPException(status_code=404, detail="Task not found!")
     else:
-        db.delete(tarefa_encontrada)
+        db.delete(task_found)
         db.commit()
 
-        return {"mensagem": "Tarefa deletada com sucesso!"}
-    
-@app.post("/habitos/")
-def criar_habito(habito: schemas.HabitoCriar, db: Session = Depends(get_db)):
-    novo_habito = modelos.Habito(title=habito.title)
+        return {"message": "Task deleted with success!"}
 
-    db.add(novo_habito)
+@app.post("/habits/")
+def create_habit(habit: schemas.habitCreate, db: Session = Depends(get_db)):
+    new_habit = models.Habit(title=habit.title)
+
+    db.add(new_habit)
     db.commit()
-    db.refresh(novo_habito)
+    db.refresh(new_habit)
 
-    return novo_habito
+    return new_habit
 
-@app.get("/habitos/")
-def ler_habitos(db: Session = Depends(get_db)):
-    habitos = db.query(modelos.Habito).all()
-    return habitos
+@app.get("/habits/")
+def read_habits(db: Session = Depends(get_db)):
+    habits = db.query(models.Habit).all()
+    return [
+        {
+            "id": h.id,
+            "title": h.title,
+            "streak": calculate_streak(h),
+            "done_today": is_done_today(h),
+            "last_check": h.last_check,
+        }
+        for h in habits
+    ]
 
-@app.put("/habitos/{habito_id}")
-def atualizar_habito(habito_id: int, habito_atualizado: schemas.HabitoAtualizar, db: Session = Depends(get_db)):
-    habito_encontrado = db.query(modelos.Habito).filter(modelos.Habito.id == habito_id).first()
-    if habito_encontrado == None:
-        raise HTTPException(status_code=404, detail="Habito não encontrado")
+@app.put("/habits/{habit_id}")
+def update_habit(habit_id: int, habit_updated: schemas.habitUpdate, db: Session = Depends(get_db)):
+    habit = db.query(models.Habit).filter(models.Habit.id == habit_id).first()
+    if habit is None:
+        raise HTTPException(status_code=404, detail="Habit not found")
+    now = datetime.datetime.now()
+
+    if habit_updated.title is not None:
+        habit.title = habit_updated.title
+
+    # mark
+    if habit_updated.is_completed is True and not is_done_today(habit):
+        habit.streak = calculate_streak(habit) + 1
+        habit.last_check = now
+
+    # unmark (only makes sense if it was marked today)
+    elif habit_updated.is_completed is False and is_done_today(habit):
+        habit.streak = max(habit.streak - 1, 0)
+        habit.last_check = now - datetime.timedelta(days=1) if habit.streak > 0 else None
+
+    db.commit()
+    db.refresh(habit)
+    return habit
+
+@app.delete("/habits/{habit_id}")
+def delete_habit(habit_id: int, db: Session = Depends(get_db)):
+    habit_found = db.query(models.Habit).filter(models.Habit.id == habit_id).first()
+    if habit_found == None:
+        raise HTTPException(status_code=404, detail="Habit not found!")
     else:
-        momentDate = datetime.datetime.now()
-        if not habito_atualizado.title == None:
-            habito_encontrado.title = habito_atualizado.title
-        if habito_atualizado.is_completed == True:
-            if habito_encontrado.last_check == None or momentDate.date() != habito_encontrado.last_check.date():
-                habito_encontrado.last_check = momentDate
-                habito_encontrado.streak += 1
-        else:
-            if habito_atualizado.is_completed == False:
-                if habito_encontrado.last_check and momentDate.date() == habito_encontrado.last_check.date():
-                    if habito_encontrado.streak > 0:
-                        habito_encontrado.streak -= 1
-                        habito_encontrado.last_check = momentDate - datetime.timedelta(days=1)
-                    else:
-                        habito_encontrado.last_check = None
-        db.commit()
-        db.refresh(habito_encontrado)
-
-        return habito_encontrado
-
-@app.delete("/habitos/{habito_id}")
-def deletar_habito(habito_id: int, db: Session = Depends(get_db)):
-    habito_encontrado = db.query(modelos.Habito).filter(modelos.Habito.id == habito_id).first()
-    if habito_encontrado == None:
-        raise HTTPException(status_code=404, detail="Habito não encontrado!")
-    else:
-        db.delete(habito_encontrado)
+        db.delete(habit_found)
         db.commit()
 
-        return {"mensagem": "Habito deletado com sucesso!"}
-    
+        return {"message": "Habit deleted with success!"}
+
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")

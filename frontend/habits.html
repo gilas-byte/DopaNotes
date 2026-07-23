@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <title>DopaNotes</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+        <style>
+            @keyframes float-violet {
+                0%, 100% { transform: translate(0px, 0px); }
+                50% { transform: translate(400px, 200px); }
+            }
+
+            @keyframes float-fuchsia {
+                0%, 100% { transform: translate(0px, 0px); }
+                50% { transform: translate(-400px, -100px); }
+            }
+
+            .light-anim-violet {
+                animation: float-violet 10s ease-in-out infinite;
+            }
+            .light-anim-fuchsia {
+                animation: float-fuchsia 14s ease-in-out infinite;
+            }
+        </style>
+    </head>
+
+    <body class="bg-zinc-900/80 text-white max-w-lg mx-auto">
+        <div class="fixed top-0 -left-10 w-72 h-72 bg-violet-600/30 rounded-full blur-3xl -z-10 light-anim-violet"></div>
+        <div class="fixed bottom-0 -right-10 w-72 h-72 bg-fuchsia-600/30 rounded-full blur-3xl -z-10 light-anim-fuchsia"></div>
+
+        <main>
+            <h1>Ola</h1>
+        </main>
+    </body>
+
+</html>

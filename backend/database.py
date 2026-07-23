@@ -2,19 +2,19 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 import os
 
-# A URL que acabamos de montar
-URL_DO_BANCO = os.environ["DATABASE_URL"]
+# The database URL, read from the environment
+database_url = os.environ["DATABASE_URL"]
 
-# O "motor" que efetivamente conecta ao banco
-engine = create_engine(URL_DO_BANCO)
+# The engine that actually connects to the database
+engine = create_engine(database_url)
 
-# A fábrica de sessões (cada requisição à nossa API abrirá uma sessão)
+# The session factory (each request to our API opens a session)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# A classe base que usaremos para criar nossas tabelas
+# The base class used to declare our tables
 Base = declarative_base()
 
-# Uma função auxiliar para a API pegar e fechar a conexão com o banco corretamente
+# Helper the API uses to open and close the database connection correctly
 def get_db():
     db = SessionLocal()
     try:

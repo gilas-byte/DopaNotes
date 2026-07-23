@@ -1,58 +1,75 @@
-import { verificarAPI } from "./api.js";
-import { aplicarTraducao, traducoes } from "./traducao.js";
+import { verifyAPI } from "./api.js";
+import { translations } from "./translation.js";
 
-verificarAPI()
+verifyAPI()
 
-function dadosHabitos() {
-    fetch("/habitos/")
-        .then(resposta => resposta.json())
-        .then(dados => {
-            let listaDeStreaks = dados.map(habito => habito.streak)
-            let maiorStreak = Math.max(...listaDeStreaks)
-            if (maiorStreak === 1){
-                document.getElementById("texto-streak").innerText = maiorStreak + " dia de sequência";
+function loadHabitsData() {
+    fetch("/habits/")
+        .then(response => response.json())
+        .then(data => {
+            const savedLanguage = localStorage.getItem('savedLanguage') || 'pt';
+
+            // Collect the streak value of every habit into a plain array.
+            const streakList = data.map(habit => habit.streak);
+
+            // Math.max() over an EMPTY array returns -Infinity, not 0.
+            // Reason: the maximum of an empty set is, by definition, the
+            // smallest possible value (so any real number would "win").
+            // Without this guard, a user with no habits would see
+            // "-Infinity day streak". So: if the list is empty, default to 0.
+            const biggestStreak = streakList.length > 0 ? Math.max(...streakList) : 0;
+
+            if (biggestStreak === 1) {
+                document.getElementById("streak-text").innerText = biggestStreak + " " + translations[savedLanguage].day_streak;
             } else {
-                document.getElementById("texto-streak").innerText = maiorStreak + " dias de sequência";
+                document.getElementById("streak-text").innerText = biggestStreak + " " + translations[savedLanguage].days_streak;
             }
-            let hoje = new Date().toISOString().split('T')[0];
-            let habitosConcluidos = dados.filter(habito => 
-                habito.last_check !== null && habito.last_check.split('T')[0] === hoje)
-            let porcentagem = (habitosConcluidos.length / dados.length) * 100
-            if (dados.length === 0) {
-                document.getElementById("numero-habitos").innerText = "0"
+
+            const today = new Date().toISOString().split('T')[0];
+            const completedHabits = data.filter(habit =>
+                habit.last_check !== null && habit.last_check.split('T')[0] === today);
+
+            // Guard the division too: 0 habits would make (0 / 0) = NaN,
+            // and "NaN%" is an invalid CSS width. Empty list -> 0%.
+            const percentage = data.length > 0 ? (completedHabits.length / data.length) * 100 : 0;
+
+            if (data.length === 0) {
+                document.getElementById("habits-count").innerText = "0";
             } else {
-                document.getElementById("numero-habitos").innerText = habitosConcluidos.length + "/" + dados.length
+                document.getElementById("habits-count").innerText = completedHabits.length + "/" + data.length;
             }
-            document.getElementById("barra-habitos").style.width = porcentagem + "%"
+            document.getElementById("habits-bar").style.width = percentage + "%";
     });
 }
 
-dadosHabitos()
+loadHabitsData()
 
-function dadosTarefas() {
-    fetch("/tarefas/")
-        .then(resposta => resposta.json())
-        .then(dados => {
-            const idiomaSalvo = localStorage.getItem('idiomaSalvo') || 'pt';
-            let tarefasConcluidas = dados.filter(tarefa => tarefa.is_completed === true);
-            let porcentagem = (tarefasConcluidas.length / dados.length) * 100;
-            let textoTarefa = ""
-            if (dados.length === 0) {
-                document.getElementById("numero-tarefas").innerText = "0";
+function loadTasksData() {
+    fetch("/tasks/")
+        .then(response => response.json())
+        .then(data => {
+            const savedLanguage = localStorage.getItem('savedLanguage') || 'pt';
+            const completedTasks = data.filter(task => task.is_completed === true);
+            const percentage = (completedTasks.length / data.length) * 100;
+            let taskText = ""
+            if (data.length === 0) {
+                document.getElementById("tasks-count").innerText = "0";
             } else {
-                document.getElementById("numero-tarefas").innerText = tarefasConcluidas.length + "/" + dados.length;
+                document.getElementById("tasks-count").innerText = completedTasks.length + "/" + data.length;
             }
-            if (porcentagem === 100) {
-                textoTarefa = traducoes[idiomaSalvo].todas_feitas;
-            } else if (porcentagem < 100 && porcentagem >= 50) {
-                textoTarefa = traducoes[idiomaSalvo].quase_la;
+            if (percentage === 100) {
+                taskText = translations[savedLanguage].all_done;
+            } else if (percentage < 100 && percentage >= 50) {
+                taskText = translations[savedLanguage].almost_there;
             } else {
-                textoTarefa = traducoes[idiomaSalvo].bora_la;
-                document.getElementById("barra-tarefas").style.width = 0 + "%";
+                taskText = translations[savedLanguage].lets_go;
+                document.getElementById("tasks-bar").style.width = 0 + "%";
             }
-            document.getElementById("barra-tarefas").style.width = porcentagem + "%"; //se for NaN no caso de não houver tarefas, ele ignora e mantém a barra-tarefas da parte de cima "0 + "%""
-            document.getElementById("texto-tarefas").innerText = textoTarefa;
+            // If percentage is NaN (no tasks), the assignment below is ignored
+            // by the browser, so the "0%" width set just above is kept.
+            document.getElementById("tasks-bar").style.width = percentage + "%";
+            document.getElementById("tasks-text").innerText = taskText;
         })
 }
 
-dadosTarefas()
+loadTasksData()
