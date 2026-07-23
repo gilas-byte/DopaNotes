@@ -1,8 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+import os
 
 # A URL que acabamos de montar
-URL_DO_BANCO = "postgresql://admin:adminpassword@db:5432/dopanotes"
+URL_DO_BANCO = os.environ["DATABASE_URL"]
 
 # O "motor" que efetivamente conecta ao banco
 engine = create_engine(URL_DO_BANCO)

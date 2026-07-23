@@ -4,7 +4,7 @@ import { aplicarTraducao, traducoes } from "./traducao.js";
 verificarAPI()
 
 function dadosHabitos() {
-    fetch("http://localhost:8000/habitos/")
+    fetch("/habitos/")
         .then(resposta => resposta.json())
         .then(dados => {
             let listaDeStreaks = dados.map(habito => habito.streak)
@@ -30,7 +30,7 @@ function dadosHabitos() {
 dadosHabitos()
 
 function dadosTarefas() {
-    fetch("http://localhost:8000/tarefas")
+    fetch("/tarefas/")
         .then(resposta => resposta.json())
         .then(dados => {
             const idiomaSalvo = localStorage.getItem('idiomaSalvo') || 'pt';

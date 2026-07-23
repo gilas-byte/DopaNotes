@@ -1,6 +1,6 @@
 export function verificarAPI() {
     console.log("1. Iniciou o fetch!");
-    fetch("http://localhost:8000/")
+    fetch("/")
         .then(resposta=> resposta.json())
         .then(dados => {
             console.log("2. Recebeu os dados!", dados);

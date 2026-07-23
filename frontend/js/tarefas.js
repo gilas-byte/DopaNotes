@@ -4,7 +4,7 @@ import { aplicarTraducao } from "./traducao.js";
 verificarAPI()
 
 function carregarTarefas() {
-    fetch ("http://localhost:8000/tarefas")
+    fetch ("/tarefas/")
     .then(resposta => resposta.json())
     .then(dados => {
         dados.sort((a, b) => a.is_completed - b.is_completed);
@@ -91,7 +91,7 @@ document.getElementById('botao-criar-tarefa').addEventListener('click', () => {
         return;
     }
 
-    fetch (`http://localhost:8000/tarefas/`, {
+    fetch (`/tarefas/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

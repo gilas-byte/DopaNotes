@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 import backend.modelos as modelos, backend.schemas as schemas
 from backend.database import engine, get_db
 import datetime
+from fastapi.staticfiles import StaticFiles
 
 # Cria as tabelas no banco de dados
 modelos.Base.metadata.create_all(bind=engine)
@@ -119,3 +120,5 @@ def deletar_habito(habito_id: int, db: Session = Depends(get_db)):
         db.commit()
 
         return {"mensagem": "Habito deletado com sucesso!"}
+    
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
