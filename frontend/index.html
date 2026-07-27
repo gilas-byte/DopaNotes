@@ -41,6 +41,28 @@
         </header>
 
         <main class="p-6 grid grid-cols-2 gap-4">
+            <div id="creation-modal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center hidden">
+                <div id="creation-interface" class="flex flex-col gap-4 bg-violet-600/20 backdrop-blur-md p-4 rounded-xl mb-6">
+                    <h2 data-i18n="what_create" class="text-xl font-bold">O que criar?</h2>
+                    <button id="close-modal-button" class="bg-red-600/80 w-6 h-6 fixed top-0 -right-0.5 rounded-full hover:bg-red-500 transition">X</button>
+                    <input class="bg-zinc-800 text-zinc-100 placeholder-zinc-500 p-3 rounded-lg outline-none focus:ring-2 focus:ring-violet-500" type="text" id="new-object-title" data-i18n-placeholder="object_title" placeholder="Título">
+                    <textarea class="bg-zinc-800 text-zinc-100 placeholder-zinc-500 p-3 rounded-lg outline-none focus:ring-2 focus:ring-violet-500" type="text" id="new-object-description" data-i18n-placeholder="object_description" placeholder="Descrição"></textarea>
+                    <div class="p-2 grid grid-cols-2 gap-4">
+                        <div>
+                            <label>
+                                <input name="object-type" value="task" data-i18n="task" type="radio">
+                                <span data-i18n="task"></span>
+                            </label>
+                            <label>
+                                <input name="object-type" value="habit" data-i18n="habit" type="radio">
+                                <span data-i18n="habit"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <button id="create-object-button" data-i18n="create_task" class="rounded-full bg-emerald-900 hover:bg-emerald-800">Criar Tarefa</button>
+                </div>
+            </div>
+
             <div onclick="window.location.href='tasks.html'" class="bg-zinc-800/50 backdrop-blur-md rounded-2xl p-5 text-center cursor-pointer hover:opacity-80">
                 <h2 data-i18n="todays_tasks" class="text-sm text-zinc-400">Tarefas de Hoje</h2>
                 <p id="tasks-count" class="text-4xl font-bold">0</p>
@@ -59,13 +81,13 @@
                 </div>
             </div>
 
-            <div class="bg-zinc-800/50 backdrop-blur-md rounded-2xl p-5 col-span-2">
+            <div onclick="window.location.href='notes.html'" class="bg-zinc-800/50 backdrop-blur-md rounded-2xl p-5 col-span-2 cursor-pointer hover:opacity-80">
                 <h2 data-i18n="quick_notes" class="text-zinc-400">Notas Rapidas</h2>
                 <p data-i18n="notes_count" id="notes-count" class="text-4xl font-bold">0 notas</p>
                 <p data-i18n="loading" class="text-zinc-400">Carregando...</p>
             </div>
 
-            <div class="bg-zinc-800/50 backdrop-blur-md rounded-2xl p-5 col-span-2">
+            <div onclick="window.location.href='projects.html'" class="bg-zinc-800/50 backdrop-blur-md rounded-2xl p-5 col-span-2 cursor-pointer hover:opacity-80">
                 <h2 data-i18n="projects" class="text-zinc-400">Projetos</h2>
                 <p data-i18n="projects_count" class="text-4xl font-bold">0 Projetos</p>
             </div>
@@ -75,7 +97,9 @@
             <button onclick="window.location.href='tasks.html'" class="hover:scale-110 transition"><i class="ph ph-calendar-check text-2xl"></i></button>
             <button onclick="window.location.href='index.html'" class="bg-fuchsia-500 text-white rounded-full w-8 h-8 hover:bg-fuchsia-400 hover:scale-110 transition"><i class="ph ph-house text-2xl"></i></button>
             <button onclick="window.location.href='settings.html'" class="hover:scale-110 transition"><i class="ph ph-gear text-2xl"></i></button>
-            <button class="bg-violet-600 text-white rounded-full w-8 h-8 hover:bg-violet-500 hover:scale-110 transition">+</button>
+            <div>
+                <button id="open-modal-button" class="bg-violet-600 text-white rounded-full w-8 h-8 hover:bg-violet-500 hover:scale-110 transition">+</button>
+            </div>
         </nav>
 
         <script type="module" src="js/index.js"></script>

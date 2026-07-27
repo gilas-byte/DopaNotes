@@ -111,12 +111,12 @@ document.getElementById('create-task-button').addEventListener('click', () => {
         document.getElementById('creation-modal').classList.toggle('hidden')
         loadTasks()
     })
-})
+});
 
 document.getElementById('open-modal-button').addEventListener('click', () => {
-document.getElementById('creation-modal').classList.toggle('hidden')
-})
+    document.getElementById('creation-modal').classList.toggle('hidden')
+    });
 
 document.getElementById('close-modal-button').addEventListener('click', () => {
-document.getElementById('creation-modal').classList.toggle('hidden')
-})
+    document.getElementById('creation-modal').classList.toggle('hidden')
+    });

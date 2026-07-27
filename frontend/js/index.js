@@ -1,23 +1,19 @@
 import { verifyAPI } from "./api.js";
 import { translations } from "./translation.js";
 
-verifyAPI()
+console.log("Veryfing API");
+
+verifyAPI();
+
+console.log("The functions will start to load!");
 
 function loadHabitsData() {
     fetch("/habits/")
         .then(response => response.json())
         .then(data => {
             const savedLanguage = localStorage.getItem('savedLanguage') || 'pt';
-
-            // Collect the streak value of every habit into a plain array.
             const streakList = data.map(habit => habit.streak);
-
-            // Math.max() over an EMPTY array returns -Infinity, not 0.
-            // Reason: the maximum of an empty set is, by definition, the
-            // smallest possible value (so any real number would "win").
-            // Without this guard, a user with no habits would see
-            // "-Infinity day streak". So: if the list is empty, default to 0.
-            const biggestStreak = streakList.length > 0 ? Math.max(...streakList) : 0;
+            const biggestStreak = streakList.length > 0 ? Math.max(...streakList) : 0; // making like this, the possibility of -infinity is none, making it "NaN proof"
 
             if (biggestStreak === 1) {
                 document.getElementById("streak-text").innerText = biggestStreak + " " + translations[savedLanguage].day_streak;
@@ -29,8 +25,6 @@ function loadHabitsData() {
             const completedHabits = data.filter(habit =>
                 habit.last_check !== null && habit.last_check.split('T')[0] === today);
 
-            // Guard the division too: 0 habits would make (0 / 0) = NaN,
-            // and "NaN%" is an invalid CSS width. Empty list -> 0%.
             const percentage = data.length > 0 ? (completedHabits.length / data.length) * 100 : 0;
 
             if (data.length === 0) {
@@ -40,9 +34,9 @@ function loadHabitsData() {
             }
             document.getElementById("habits-bar").style.width = percentage + "%";
     });
-}
+};
 
-loadHabitsData()
+loadHabitsData();
 
 function loadTasksData() {
     fetch("/tasks/")
@@ -65,11 +59,93 @@ function loadTasksData() {
                 taskText = translations[savedLanguage].lets_go;
                 document.getElementById("tasks-bar").style.width = 0 + "%";
             }
-            // If percentage is NaN (no tasks), the assignment below is ignored
-            // by the browser, so the "0%" width set just above is kept.
             document.getElementById("tasks-bar").style.width = percentage + "%";
             document.getElementById("tasks-text").innerText = taskText;
         })
+};
+
+loadTasksData();
+
+function clearModal() {
+    document.getElementById('new-object-title').value = ""
+    document.getElementById('new-object-description').value = ""
 }
 
-loadTasksData()
+document.getElementById('open-modal-button').addEventListener('click', () => {
+    console.log("The button has been pressed!");
+    document.getElementById('creation-modal').classList.toggle('hidden')
+    });
+
+document.getElementById('close-modal-button').addEventListener('click', () => {
+    document.getElementById('creation-modal').classList.toggle('hidden')
+    });
+
+
+function addCreateObjectEvent() {
+    document.getElementById('create-object-button').addEventListener('click', () => {
+        const savedLanguage = localStorage.getItem('savedLanguage') || 'pt';
+        const title = document.getElementById('new-object-title').value.trim();
+        const description = document.getElementById('new-object-description').value;
+        const selectedRadio = document.querySelector('input[name="object-type"]:checked');
+        let type = ""
+        if (selectedRadio === null) {
+            alert(translations[savedLanguage].no_type_alert);
+            return;
+        } else{
+            type = selectedRadio.value;
+        }
+
+        console.log(title, "-", description, "-", type)
+
+        if (title === null || title === "") {
+            alert(translations[savedLanguage].no_title_alert);
+            clearModal();
+            return;
+        }
+
+        if (type === "task") {
+            fetch (`/tasks/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+                },
+            body: JSON.stringify({
+                title: title ,
+                description: description
+                })
+            }
+            )
+            .then( () => {
+                clearModal();
+                document.getElementById('creation-modal').classList.toggle('hidden')
+                loadTasksData();
+                return;
+            })
+        } else if (type === "habit") {
+            fetch (`/habits/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+                },
+            body: JSON.stringify({
+                title: title ,
+                description: description
+                })
+            })
+
+            .then( () => {
+                clearModal();
+                document.getElementById('creation-modal').classList.toggle('hidden')
+                loadHabitsData();
+                return;
+            })
+        } else {
+            alert(translations[savedLanguage].no_type_alert);
+            return;
+        }
+    });
+}
+
+addCreateObjectEvent()
+
+console.log("The functions have been loaded!");

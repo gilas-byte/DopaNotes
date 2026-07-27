@@ -2,8 +2,10 @@ export const translations = {
     pt: {
         home: "Início",
         tasks: "Tarefas",
+        task: "Tarefa",
         todays_tasks: "Tarefas de Hoje",
         habits: "Hábitos",
+        habit: "Habito",
         todays_habits: "Hábitos de Hoje",
         settings: "Configurações",
         language: "Idioma",
@@ -23,13 +25,18 @@ export const translations = {
         task_description: "Descrição da tarefa",
         create_task: "Criar Tarefa",
         new_task: "+ Nova Tarefa",
-        no_title_alert: "Não pode enviar uma tarefa sem título!"
+        no_title_alert: "Não pode enviar uma tarefa sem título!",
+        notes: "Notas",
+        what_create: "O que criar?",
+        no_type_alert: "Você tem que selecionar um tipo!"
     },
     en: {
         home: "Home",
         tasks: "Tasks",
+        task: "Task",
         todays_tasks: "Today's Tasks",
         habits: "Habits",
+        habit: "Habit",
         todays_habits: "Today's Habits",
         settings: "Settings",
         language: "Language",
@@ -49,7 +56,10 @@ export const translations = {
         task_description: "Task description",
         create_task: "Create Task",
         new_task: "+ New Task",
-        no_title_alert: "You can't submit a task without a title!"
+        no_title_alert: "You can't submit a task without a title!",
+        notes: "Notes",
+        what_create: "Create what?",
+        no_type_alert: "You need to select a type!"
     }
 };
 
