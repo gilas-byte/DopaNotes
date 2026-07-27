@@ -1,11 +1,14 @@
 import { verifyAPI } from "./api.js";
 import { translations } from "./translation.js";
-
-console.log("Veryfing API");
+import { createModal, setupModalListeners, clearModal } from './modal.js';
 
 verifyAPI();
 
-console.log("The functions will start to load!");
+console.log('API Verified')
+
+document.getElementById('modal-container').innerHTML = createModal();
+
+console.log("The functions will start to load...");
 
 function loadHabitsData() {
     fetch("/habits/")
@@ -66,86 +69,10 @@ function loadTasksData() {
 
 loadTasksData();
 
-function clearModal() {
-    document.getElementById('new-object-title').value = ""
-    document.getElementById('new-object-description').value = ""
-}
+setupModalListeners(loadTasksData(), loadHabitsData(), "noFunctionYet");
 
-document.getElementById('open-modal-button').addEventListener('click', () => {
-    console.log("The button has been pressed!");
-    document.getElementById('creation-modal').classList.toggle('hidden')
-    });
-
-document.getElementById('close-modal-button').addEventListener('click', () => {
-    document.getElementById('creation-modal').classList.toggle('hidden')
-    });
-
-
-function addCreateObjectEvent() {
-    document.getElementById('create-object-button').addEventListener('click', () => {
-        const savedLanguage = localStorage.getItem('savedLanguage') || 'pt';
-        const title = document.getElementById('new-object-title').value.trim();
-        const description = document.getElementById('new-object-description').value;
-        const selectedRadio = document.querySelector('input[name="object-type"]:checked');
-        let type = ""
-        if (selectedRadio === null) {
-            alert(translations[savedLanguage].no_type_alert);
-            return;
-        } else{
-            type = selectedRadio.value;
-        }
-
-        console.log(title, "-", description, "-", type)
-
-        if (title === null || title === "") {
-            alert(translations[savedLanguage].no_title_alert);
-            clearModal();
-            return;
-        }
-
-        if (type === "task") {
-            fetch (`/tasks/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-                },
-            body: JSON.stringify({
-                title: title ,
-                description: description
-                })
-            }
-            )
-            .then( () => {
-                clearModal();
-                document.getElementById('creation-modal').classList.toggle('hidden')
-                loadTasksData();
-                return;
-            })
-        } else if (type === "habit") {
-            fetch (`/habits/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-                },
-            body: JSON.stringify({
-                title: title ,
-                description: description
-                })
-            })
-
-            .then( () => {
-                clearModal();
-                document.getElementById('creation-modal').classList.toggle('hidden')
-                loadHabitsData();
-                return;
-            })
-        } else {
-            alert(translations[savedLanguage].no_type_alert);
-            return;
-        }
-    });
-}
-
-addCreateObjectEvent()
+document.getElementById('open-object-modal-button').addEventListener('click', () => {
+    document.getElementById('object-creation-modal').classList.toggle('hidden')
+});
 
 console.log("The functions have been loaded!");

@@ -1,7 +1,16 @@
 import { verifyAPI } from "./api.js";
 import { translations } from "./translation.js";
+import { createModal, setupModalListeners, clearModal } from './modal.js';
 
 verifyAPI()
+
+document.getElementById('modal-container').innerHTML = createModal();
+
+setupModalListeners();
+
+document.getElementById('open-object-modal-button').addEventListener('click', () => {
+    document.getElementById('object-creation-modal').classList.toggle('hidden')
+});
 
 function loadTasks() {
     const savedLanguage = localStorage.getItem('savedLanguage') || 'pt';
@@ -11,14 +20,17 @@ function loadTasks() {
         data.sort((a, b) => a.is_completed - b.is_completed);
         data.forEach((task, i) => {
             const taskCard = document.createElement('div');
-            taskCard.className = "bg-zinc-800/50 backdrop-blur-md p-4 rounded-xl flex items-center justify-between mb-4" ;
+            taskCard.className = "bg-zinc-800/50 p-4 rounded-xl flex justify-between items-center mb-3 backdrop-blur-md" ;
             const buttonGroup = document.createElement('div') ;
             buttonGroup.className = "flex items-center gap-3" ;
             const title = document.createElement('h3');
+            title.className = "text-lg font-semibold"
             const doneButton = document.createElement('button') ;
-            doneButton.className ="w-6 h-6 rounded-full border-2 border-emerald-500" ;
+            doneButton.className ="w-6 h-6 rounded-full border-2 border-violet-500 hover:bg-violet-500/20 transition" ;
             const deleteButton = document.createElement('button') ;
-            deleteButton.className ="ph ph-trash text-zinc-100 bg-red-600/80 hover:bg-red-500 p-2 rounded-lg transition-colors cursor-pointer" ;
+            deleteButton.className ="hover:text-red-500 transition" ;
+            const deleteIcon = document.createElement('i')
+            deleteIcon.className = "ph ph-trash text-xl"
             if (task.is_completed === true) {
                 doneButton.classList.add("bg-emerald-500")
                 taskCard.classList.remove("bg-zinc-800/50")
@@ -55,11 +67,17 @@ function loadTasks() {
                 fetch(`/tasks/${task.id}`, {
                     method: 'DELETE' ,
                 })
-                taskCard.remove()
+                taskCard.remove();
+                document.getElementById('tasks-container').innerHTML = ""
+                setTimeout( () => {
+                    loadTasks();
+                }, 500)
+                
             })
             title.textContent = task.title;
             taskCard.appendChild(title)
             buttonGroup.appendChild(doneButton)
+            deleteButton.appendChild(deleteIcon)
             buttonGroup.appendChild(deleteButton)
             taskCard.appendChild(buttonGroup)
             document.getElementById('tasks-container').appendChild(taskCard)
@@ -118,5 +136,12 @@ document.getElementById('open-modal-button').addEventListener('click', () => {
     });
 
 document.getElementById('close-modal-button').addEventListener('click', () => {
-    document.getElementById('creation-modal').classList.toggle('hidden')
+    const interfaceElement = document.getElementById('creation-interface');
+    const modalBackground = document.getElementById('creation-modal');
+    interfaceElement.classList.add('pop-out-anim-modal');
+    setTimeout(() => {
+        modalBackground.classList.add('hidden');
+        interfaceElement.classList.remove('pop-out-anim-modal');
+        clearModal() 
+        }, 200); 
     });

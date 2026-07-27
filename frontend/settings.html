@@ -1,29 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
     <head>
-        <title data-i18n="settings">Settings</title>
+        <title>DopaNotes</title>
         <script src="https://cdn.tailwindcss.com"></script>
 
         <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-        <style>
-            @keyframes float-violet {
-                0%, 100% { transform: translate(0px, 0px); }
-                50% { transform: translate(400px, 200px); }
-            }
-
-            @keyframes float-fuchsia {
-                0%, 100% { transform: translate(0px, 0px); }
-                50% { transform: translate(-400px, -100px); }
-            }
-
-            .light-anim-violet {
-                animation: float-violet 10s ease-in-out infinite;
-            }
-            .light-anim-fuchsia {
-                animation: float-fuchsia 14s ease-in-out infinite;
-            }
-        </style>
+        <link rel="stylesheet" href="css/animations.css">
     </head>
 
     <body class="bg-zinc-900/80 text-white max-w-lg mx-auto">
@@ -40,6 +23,8 @@
             </div>
         </header>
 
+        <div id="modal-container"></div>
+
         <main>
             <div class="bg-zinc-800/50 backdrop-blur-md rounded-2xl p-5 flex justify-between items-center">
                 <p data-i18n="language">Idioma</p>
@@ -54,9 +39,10 @@
             <button onclick="window.location.href='tasks.html'" class="hover:scale-110 transition"><i class="ph ph-calendar-check text-2xl"></i></button>
             <button onclick="window.location.href='index.html'" class="hover:scale-110 transition"><i class="ph ph-house text-2xl"></i></button>
             <button onclick="window.location.href='settings.html'" class="bg-fuchsia-500 text-white rounded-full w-8 h-8 hover:bg-fuchsia-400 hover:scale-110 transition"><i class="ph ph-gear text-2xl"></i></button>
-            <button class="bg-violet-600 text-white rounded-full w-8 h-8 hover:bg-violet-500 hover:scale-110 transition">+</button>
+            <button id="open-object-modal-button" class="bg-violet-600 text-white rounded-full w-8 h-8 hover:bg-violet-500 hover:scale-110 transition">+</button>
         </nav>
 
         <script type="module" src="js/settings.js"></script>
+        <script type="module" src="js/translation.js"></script>
     </body>
 </html>

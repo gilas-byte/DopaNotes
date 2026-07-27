@@ -1,0 +1,36 @@
+@keyframes float-violet {
+    0%, 100% { transform: translate(0px, 0px); }
+    50% { transform: translate(650px, 200px); }
+}
+
+@keyframes float-fuchsia {
+    0%, 100% { transform: translate(0px, 0px); }
+    50% { transform: translate(-650px, -100px); }
+}
+
+@keyframes pop-in-modal {
+    0% { opacity: 0; transform: scale(0);}
+    100% { opacity: 1; transform: scale(1);}
+}
+
+@keyframes pop-out-modal {
+    0% { opacity: 1; transform: scale(1);}
+    100% { opacity: 0; transform: scale(0);}
+}
+
+.light-anim-violet {
+    animation: float-violet 12s ease-in-out infinite;
+}
+.light-anim-fuchsia {
+    animation: float-fuchsia 16s ease-in-out infinite;
+}
+
+.pop-in-anim-modal {
+    transform-origin: bottom;
+    animation: pop-in-modal 0.2s ease-out;
+}
+
+.pop-out-anim-modal {
+    transform-origin: bottom;
+    animation: pop-out-modal 0.2s ease-in;
+}

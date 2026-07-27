@@ -7,6 +7,7 @@ export const translations = {
         habits: "Hábitos",
         habit: "Habito",
         todays_habits: "Hábitos de Hoje",
+        no_habits: "Você não tem hábitos criados, crie um agora mesmo!",
         settings: "Configurações",
         language: "Idioma",
         loading: "Carregando...",
@@ -21,14 +22,21 @@ export const translations = {
         day_streak: "dia de sequência",
         days_streak: "dias de sequência",
         which_task: "Qual tarefa?",
+        which_habit: "Qual hábito?",
         task_title: "Título da tarefa",
         task_description: "Descrição da tarefa",
         create_task: "Criar Tarefa",
+        create_habit: "Criar Hábito",
         new_task: "+ Nova Tarefa",
+        new_habit: "+ Novo Habito",
         no_title_alert: "Não pode enviar uma tarefa sem título!",
         notes: "Notas",
         what_create: "O que criar?",
-        no_type_alert: "Você tem que selecionar um tipo!"
+        no_type_alert: "Você tem que selecionar um tipo!",
+        object_title: "Título",
+        object_description: "Descrição",
+        habit_title: "Título do hábito",
+        habit_description: "Descrição do hábito",
     },
     en: {
         home: "Home",
@@ -49,42 +57,43 @@ export const translations = {
         almost_there: "Almost there!",
         lets_go: "Let's go!",
         nothing_today: "Nothing for today, create a new task or take a rest!",
+        no_habits: "You don't have any habit created, create one right now!",
         day_streak: "day streak",
         days_streak: "day streak",
         which_task: "Which task?",
+        which_habit: "Which habit?",
         task_title: "Task title",
         task_description: "Task description",
         create_task: "Create Task",
+        create_habit: "Create Habit",
         new_task: "+ New Task",
+        new_habit: "+ New Habit",
         no_title_alert: "You can't submit a task without a title!",
         notes: "Notes",
         what_create: "Create what?",
-        no_type_alert: "You need to select a type!"
+        no_type_alert: "You need to select a type!",
+        object_title: "Title",
+        object_description: "Description",
+        habit_title: "Habit title",
+        habit_description: "Habit description",
     }
 };
 
 export function applyTranslation(language) {
-    // Fall back to Portuguese if the requested language does not exist.
     const dictionary = translations[language] || translations.pt;
     localStorage.setItem('savedLanguage', language);
-
-    // Translate text nodes marked with data-i18n.
     document.querySelectorAll("[data-i18n]").forEach((element) => {
         const key = element.getAttribute('data-i18n');
         if (dictionary[key] !== undefined) {
             element.innerText = dictionary[key];
         }
     });
-
-    // Translate input/textarea placeholders marked with data-i18n-placeholder.
     document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
         const key = element.getAttribute('data-i18n-placeholder');
         if (dictionary[key] !== undefined) {
             element.placeholder = dictionary[key];
         }
     });
-
-    // Keep the language selector (settings page) in sync with the active language.
     const languageMenu = document.getElementById('language-selector');
     if (languageMenu) {
         languageMenu.value = language;
